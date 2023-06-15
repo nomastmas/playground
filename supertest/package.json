@@ -1,0 +1,16 @@
+{
+  "name": "supertest",
+  "version": "1.0.0",
+  "description": "supertest + mocha for api testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "nomastmas",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
+  }
+}
