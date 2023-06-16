@@ -1,0 +1,61 @@
+# assume read heavy load during peak traffic
+# verify system can perform within SLA during peak
+# verify system can continue to perform after peak traffic subsides
+config:
+  target: "https://jsonplaceholder.typicode.com"
+  plugins:
+    expect:
+      outputFormat: "prettyError"
+  phases:
+    - name: warm up
+      duration: 60
+      arrivalRate: 1
+      rampTo: 10
+    - name: surge
+      duration: 180
+      arrivalRate: 100
+    - name: warm down
+      duration: 60
+      arrivalRate: 20
+      rampTo: 1
+  variables:
+    id:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+scenarios:
+  - name: get random post
+    weight: 5
+    flow:
+      - get:
+          url: "/posts/{{ id }}"
+          expect:
+            - statusCode:
+              - 200
+
+  - name: create post
+    weight: 1
+    flow: 
+      - post:
+          url: "/posts"
+          json:
+            title: foo
+            body: the quick brown fox jumped over the lazy dog
+          expect:
+            - statusCode:
+              - 201
+
+  - name: edit random post
+    weight: 2
+    flow:
+      - patch:
+          url: "/posts/{{ id }}"
+          json:
+            title: foo
+            body: the quick brown fox jumped over the lazy dog
+          expect:
+            - statusCode:
+              - 200
+    
