@@ -1,0 +1,15 @@
+{
+  "name": "artillery",
+  "version": "1.0.0",
+  "description": "POC Artillery for API load testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "nomastmas",
+  "license": "ISC",
+  "dependencies": {
+    "artillery": "^2.0.0-33",
+    "artillery-plugin-expect": "^2.2.1"
+  }
+}
