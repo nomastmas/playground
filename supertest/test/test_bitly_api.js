@@ -240,3 +240,51 @@ describe('PATCH /v4/bitlinks/{bitlink}', () => {
     assert(res.status === 403, `Expected 403, received ${res.status}`);
   });
 });
+
+describe('User', () => {
+  const long_url = 'https://www.linkedin.com/in/thomaswtsang/';
+  const title1 = 'foobar';
+  const tags1 = ['foo', 'bar'];
+  const title2 = 'catbug';
+  const tags2 = ['cat', 'bug'];
+
+  const header = {
+    authorization: `Bearer ${process.env.BITLY_AUTH_TOKEN}`
+  };
+
+  it('should create a Bitlink and update successfully', async () => {
+    const post_data = {
+      long_url: long_url,
+      title: title1,
+      tags: tags1
+    };
+
+    let res = await request
+                        .post('/v4/bitlinks')
+                        .set(header)
+                        .send(post_data);
+
+    let body = res.body;
+
+    assert(res.status === 200, `Expected 200, received ${res.status}`);
+    assert(body.title === title1);
+    assert.sameMembers(body.tags, tags1);
+
+    const bitlink_id = body.id;
+    const patch_data = {
+      title: title2,
+      tags: tags2
+    };
+
+    res = await request
+                        .patch(`/v4/bitlinks/${bitlink_id}`)
+                        .set(header)
+                        .send(patch_data);
+
+    body = res.body;
+
+    assert(res.status === 200, `Expected 200, received ${res.status}`);
+    assert(body.title === title2)
+    assert.sameMembers(body.tags, tags2);
+  });
+});
