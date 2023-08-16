@@ -1,0 +1,5 @@
+node_modules
+terraform
+.git
+.DS_Store
+__pycache__
