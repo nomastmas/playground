@@ -1,2 +1,3 @@
-# api_test
-POC for API testing
+# Playground
+
+A playground for trying out and testing ideas
