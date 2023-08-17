@@ -11,10 +11,12 @@ services:
 
   locust-exporter:
     image: containersol/locust_exporter
-    network_mode: "host"
+    environment:
+      - LOCUST_EXPORTER_URI=http://master:8089
     ports:
-      - "9646:9646"
-    # command: go run main.go --locust.uri http://localhost:8089 --web.listen-address :9694
+      - 9646:9646
+    depends_on:
+      - master
 
   prometheus:
     build:
@@ -22,3 +24,5 @@ services:
       dockerfile: Dockerfile-prometheus
     ports:
       - "9090:9090"
+    depends_on:
+      - locust-exporter
