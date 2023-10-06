@@ -2,9 +2,19 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config({ path: './.env' });
 
+import { MongoMemoryServer } from 'mongodb-memory-server';
+
+let mongod = null;
+
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
+    if (process.env.NODE_ENV === 'test') {
+      mongod = await MongoMemoryServer.create();
+    }
+
+    const dbUrl = process.env.NODE_ENV === 'test' ? mongod.getUri() : process.env.MONGO_URI;
+
+    await mongoose.connect(dbUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -15,5 +25,17 @@ const connectDB = async () => {
   }
 };
 
-export default connectDB;
+const disconnectDB = async () => {
+  try {
+    await mongoose.connection.close();
+    if (mongod) {
+      await mongod.stop();
+    }
+  } catch (err) {
+    console.log(err);
+    process.exit(1);
+  }
+}
+
+export { connectDB, disconnectDB };
 
