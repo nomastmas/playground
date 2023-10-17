@@ -4,7 +4,9 @@ import dotenv from 'dotenv';
 dotenv.config({ path: './config/.env' });
 const app = express();
 
-connectDB();
+if (process.env.NODE_ENV != 'test') {
+  await connectDB();
+}
 
 import indexRouter from './routes/index.js';
 import urlsRouter from './routes/urls.js';
