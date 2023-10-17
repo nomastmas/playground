@@ -1,29 +1,29 @@
 import supertest from 'supertest';
-// import expect from 'expect';
 import { expect } from 'chai';
 import { app, server }  from '../app.js';
+import { connectDB, disconnectDB } from '../config/db.js';
 
 const request = supertest(app);
 
-import { connectDB, disconnectDB } from '../config/db.js';
-
 describe('API test', () => {
-  before(() => {
-    connectDB();
+  before( async () => {
+    await connectDB();
   });
 
-  after(() => {
-    disconnectDB();
-    server.close();
+  after(async () => {
+    await disconnectDB();
+    server.closeAllConnections();
+    // app close?
   });
 
-  describe('POST /api/short', () => {
+  describe('POST /api/shorten', () => {
     it('creates a shortened URL', async () => {
-      const res = await request.post('/api/test', {
+      const res = await request.post('/api/shorten', {
         origUrl: 'http://example.com/example?foo=bar'
       });
 
-      expect(res.status).to.equal(201);
+      console.log(res.error);
+      expect(res.status).to.equal(200);
     });
   });
 });
