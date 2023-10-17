@@ -27,6 +27,7 @@ const connectDB = async () => {
 
 const disconnectDB = async () => {
   try {
+    console.log('Disconnecting database...');
     await mongoose.connection.close();
     if (mongod) {
       await mongod.stop();
