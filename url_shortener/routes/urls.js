@@ -9,11 +9,11 @@ dotenv.config({ path: '../config/.env' });
 const router = express.Router();
 
 // short url generator
-router.post('/short', async(req, res) => {
+router.post('/shorten', async(req, res) => {
   const { origUrl } = req.body;
   const base = process.env.BASE;
 
-  const urlId = nanoid();
+  const urlId = nanoid(7);
   if (validateUrl(origUrl)) {
     try {
       let url = await Url.findOne({ origUrl });
