@@ -42,6 +42,9 @@ describe('sauce-demo', () => {
     cy.get('[data-test="add-to-cart-sauce-labs-bolt-t-shirt"]').click()
     cy.get('[data-test="add-to-cart-sauce-labs-fleece-jacket"]').click()
     cy.get('[data-test="shopping-cart-link"]').click()
+
+    cy.location('pathname').should('eq', '/cart.html')
+    cy.get('data-test="remove-sauce-labs-bike-light"').click()
     cy.get('[data-test="checkout"]').click()
 
     cy.location('pathname').should('eq', '/checkout-step-one.html')
