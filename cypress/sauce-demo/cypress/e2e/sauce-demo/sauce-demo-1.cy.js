@@ -44,7 +44,7 @@ describe('sauce-demo', () => {
     cy.get('[data-test="shopping-cart-link"]').click()
 
     cy.location('pathname').should('eq', '/cart.html')
-    cy.get('data-test="remove-sauce-labs-bike-light"').click()
+    cy.get('[data-test="remove-sauce-labs-bike-light"]').click()
     cy.get('[data-test="checkout"]').click()
 
     cy.location('pathname').should('eq', '/checkout-step-one.html')
@@ -59,6 +59,13 @@ describe('sauce-demo', () => {
     cy.location('pathname').should('eq', '/checkout-complete.html')
     cy.get('[data-test="complete-header"]').should('have.text', 'Thank you for your order!')
   });
+
+  it('asserts the user logs out successfully', () => {
+    cy.get('#react-burger-menu-btn').click()
+    cy.get('[data-test="logout-sidebar-link"]').click()
+    cy.location('pathname').should('eq', '/')
+    cy.getCookies().should('have.length', 0);
+  })
 
 
 });
