@@ -4,6 +4,10 @@ describe('sauce-demo', () => {
   const password = standardUser.password;
 
   beforeEach(() => {
+    cy.intercept('/service-worker.js', {
+      body: undefined
+     });
+
     cy.visit('/');
     cy.get('[data-test="username"]').type(username);
     cy.get('[data-test="password"]').type(password);
