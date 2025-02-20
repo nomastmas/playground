@@ -1,26 +1,27 @@
 const { test, expect } = require('@playwright/test');
 const TodoPage = require('./pages/TodoPage');
+const { todo } = require('node:test');
 
 test.describe('todo mvc', () => {
-    test.describe('basic', () => {
-        let todoPage;
-        test.beforeEach(async ({ page }) => {
-            todoPage = new TodoPage(page);
-            await todoPage.goto();
-            await expect(page.url()).toContain('react');
-            await expect(page.locator('h1')).toContainText('todos');
-            await expect(page.getByTestId('todo-item-label')).toHaveCount(0);
-        });
+    let todoPage;
+    test.beforeEach(async ({ page }) => {
+        todoPage = new TodoPage(page);
+        await todoPage.goto();
+        await expect(page.url()).toContain('react');
+        await expect(page.locator('h1')).toContainText('todos');
+        await expect(page.getByTestId('todo-item-label')).toHaveCount(0);
+    });
 
+    test.describe('basic', () => {
         test('add a new todo item', async ({ page }) => {
-            await todoPage.addTodo('buy milk');
+            await todoPage.addTodoItem('buy milk');
 
             await expect(todoPage.todoItems).toHaveText('buy milk');
             await expect(todoPage.todoItems).toHaveCount(1);
         });
 
-        test.only('mark a todo as complete', async ({ page }) => {
-            await todoPage.addTodo('buy milk');
+        test('mark a todo as complete', async ({ page }) => {
+            await todoPage.addTodoItem('buy milk');
             await expect(todoPage.todoItems).toHaveCount(1);
             await todoPage.markTodoComplete('buy milk');
 
@@ -29,7 +30,7 @@ test.describe('todo mvc', () => {
         });
 
         test.skip('delete a todo item', async ({ page }) => {
-            await todoPage.addTodo('buy milk');
+            await todoPage.addTodoItem('buy milk');
             await expect(todoPage.todoItems).toHaveCount(1);
             await todoPage.deleteTodoItem('buy milk');
 
@@ -40,6 +41,13 @@ test.describe('todo mvc', () => {
     test.describe('intermediate', () => {
     // Intermediate tests
     // Edit an existing todo
+        test('edit a todo item', async ({page}) => {
+            await todoPage.addTodoItem('buy milk');
+            await expect(todoPage.todoItems).toHaveCount(1);
+
+            await todoPage.editTodoItem('buy milk', 'buy eggs');
+            await expect(todoPage.todoItems).toHaveText('buy eggs');
+        });
     // Toggle all todos complete/incomplete
     // Clear completed todos
     // Verify todo count updates correctly
