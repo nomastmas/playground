@@ -9,10 +9,16 @@ class TodoPage {
         this.todoItemLabels = this.todoItems.getByTestId('todo-item-label');
         this.todoItemCheckbox = this.todoItems.getByTestId('todo-item-toggle');
         this.todoDelete = page.getByTestId('todo-item-button');
+        this.clearCompletedButton = page.getByText('Clear completed');
+        this.todoCountSummary = page.getByTestId('footer').locator('.todo-count');
     }
 
     async goto() {
         await this.page.goto('https://todomvc.com/examples/react/dist/');
+    }
+
+    async clearCompletedTodoItems() {
+        await this.clearCompletedButton.click();
     }
 
     async switchListTo(text) {
@@ -26,7 +32,6 @@ class TodoPage {
 
     async editTodoItem(text, newText) {
         const index = await this.findItemIndex(text);
-        console.log(`index: ${index}`)
         if (index >= 0) await this.editTodoItemByIndex(index, newText);
         return this;
     }

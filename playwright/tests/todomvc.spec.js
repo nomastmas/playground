@@ -46,7 +46,7 @@ test.describe('todo mvc', () => {
             await todoPage.editTodoItem('buy milk', 'buy eggs');
             await expect(todoPage.todoItems).toHaveText('buy eggs');
         });
-    // Toggle all todos complete/incomplete
+
         test('toggle between active and incomplete todos', async ({page}) => {
             await todoPage.addTodoItem('buy milk');
             await todoPage.addTodoItem('buy eggs');
@@ -64,9 +64,38 @@ test.describe('todo mvc', () => {
 
             await todoPage.switchListTo('All');
             await expect(todoPage.todoItems).toHaveCount(3);
+        });
+
+        test('clear completed todo items', async ({page}) => {
+            await todoPage.addTodoItem('buy milk');
+            await todoPage.addTodoItem('buy eggs');
+            await todoPage.addTodoItem('buy butter');
+            await expect(todoPage.todoItems).toHaveCount(3);
+
+            await expect(todoPage.clearCompletedButton).toBeDisabled();
+
+            await todoPage.markTodoComplete('buy eggs');
+            await todoPage.markTodoComplete('buy butter');
+
+            await todoPage.clearCompletedTodoItems();
+            await expect(todoPage.todoItems).toHaveCount(1);
+        });
+
+        test('verify todo count summary is updated', async ({page}) => {
+            await expect(todoPage.todoCountSummary).not.toBeVisible();
+
+            await todoPage.addTodoItem('buy milk');
+            await expect(todoPage.todoCountSummary).toHaveText('1 item left!');
+            await todoPage.addTodoItem('buy eggs');
+            await todoPage.addTodoItem('buy butter');
+            await expect(todoPage.todoItems).toHaveCount(3);
+            await expect(todoPage.todoCountSummary).toHaveText('3 items left!');
+
+            await todoPage.markTodoComplete('buy milk');
+            await todoPage.markTodoComplete('buy eggs');
+            await todoPage.markTodoComplete('buy butter');
+            await expect(todoPage.todoCountSummary).toHaveText('0 items left!');
         })
-    // Clear completed todos
-    // Verify todo count updates correctly
     });
 
     test.describe('advanced', () => {
