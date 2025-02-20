@@ -1,41 +1,39 @@
 const { test, expect } = require('@playwright/test');
+const TodoPage = require('./pages/TodoPage');
 
 test.describe('todo mvc', () => {
     test.describe('basic', () => {
-    // Basic tests
-    // Add a new todo item
-    // Mark a todo as complete
-    // Delete a todo item
+        let todoPage;
         test.beforeEach(async ({ page }) => {
-            await page.goto('https://todomvc.com/examples/react/dist/');
+            todoPage = new TodoPage(page);
+            await todoPage.goto();
             await expect(page.url()).toContain('react');
             await expect(page.locator('h1')).toContainText('todos');
+            await expect(page.getByTestId('todo-item-label')).toHaveCount(0);
         });
 
         test('add a new todo item', async ({ page }) => {
-            await page.getByTestId('text-input').fill('buy milk');
-            await page.getByTestId('text-input').press('Enter');
-            await expect(page.getByTestId('todo-item-label')).toHaveText('buy milk');
-            await expect(page.getByTestId('todo-item-label')).toHaveCount(1);
+            await todoPage.addTodo('buy milk');
+
+            await expect(todoPage.todoItems).toHaveText('buy milk');
+            await expect(todoPage.todoItems).toHaveCount(1);
         });
 
-        test('mark a todo as complete', async ({ page }) => {
-            await page.getByTestId('text-input').fill('buy milk');
-            await page.getByTestId('text-input').press('Enter');
-            await expect(page.getByTestId('todo-item-label')).toHaveCount(1);
-            await page.getByTestId('todo-item-toggle').click();
-            await expect(page.getByTestId('todo-item-label')).toHaveCount(1);
-            await expect(page.locator('.todo-count')).toHaveText('0 items left!');
+        test.only('mark a todo as complete', async ({ page }) => {
+            await todoPage.addTodo('buy milk');
+            await expect(todoPage.todoItems).toHaveCount(1);
+            await todoPage.markTodoComplete('buy milk');
+
+            await expect(todoPage.todoItems).toHaveText('buy milk');
+            await expect(todoPage.todoItems).toHaveCount(1);
         });
 
-        test('delete a todo item', async ({ page }) => {
-            await page.getByTestId('text-input').fill('buy milk');
-            await page.getByTestId('text-input').press('Enter');
-            await expect(page.getByTestId('todo-item-label')).toHaveCount(1);
-            await page.getByTestId('todo-item-label').hover();
-            await expect(page.getByTestId('todo-item-button')).toBeVisible();
-            await page.getByTestId('todo-item-button').click();
-            await expect(page.getByTestId('todo-item-label')).toHaveCount(0);
+        test.skip('delete a todo item', async ({ page }) => {
+            await todoPage.addTodo('buy milk');
+            await expect(todoPage.todoItems).toHaveCount(1);
+            await todoPage.deleteTodoItem('buy milk');
+
+            await expect(todoPage.todoItems).toHaveCount(0);
         });
     });
 

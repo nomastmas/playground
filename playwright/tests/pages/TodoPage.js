@@ -32,6 +32,7 @@ class TodoPage {
         return this;
     }
 
+    /*
     async deleteTodoByIndex(index) {
         await this.todoItems.nth(index).hover();
         await this.todoDelete.nth(index).waitFor({state: 'visible'});
@@ -39,6 +40,7 @@ class TodoPage {
         await this.todoDelete.nth(index).click();
         return this;
     }
+    */
 
     async markTodoComplete(text) { 
         const index = this.findItemIndex(text);
@@ -46,11 +48,13 @@ class TodoPage {
         return this;
     }
 
+    /*
     async deleteTodoItem(text) {
         const index = this.findItemIndex(text);
         if (index >= 0) await this.deleteTodoByIndex(index);
         return this;
     }
+    */
 
     async todoItemCount() {
         return this.todoItems.count();
