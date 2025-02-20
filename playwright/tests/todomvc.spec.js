@@ -39,8 +39,6 @@ test.describe('todo mvc', () => {
     });
 
     test.describe('intermediate', () => {
-    // Intermediate tests
-    // Edit an existing todo
         test('edit a todo item', async ({page}) => {
             await todoPage.addTodoItem('buy milk');
             await expect(todoPage.todoItems).toHaveCount(1);
@@ -49,6 +47,24 @@ test.describe('todo mvc', () => {
             await expect(todoPage.todoItems).toHaveText('buy eggs');
         });
     // Toggle all todos complete/incomplete
+        test('toggle between active and incomplete todos', async ({page}) => {
+            await todoPage.addTodoItem('buy milk');
+            await todoPage.addTodoItem('buy eggs');
+            await todoPage.addTodoItem('buy butter');
+            await expect(todoPage.todoItems).toHaveCount(3);
+
+            await todoPage.markTodoComplete('buy eggs');
+            await todoPage.switchListTo('Active');
+            await expect(todoPage.todoItems.filter({ hasText: 'buy eggs' })).toHaveCount(0);
+            await expect(todoPage.todoItems).toHaveCount(2);
+
+            await todoPage.switchListTo('Completed');
+            await expect(todoPage.todoItems).toHaveText('buy eggs');
+            await expect(todoPage.todoItems).toHaveCount(1);
+
+            await todoPage.switchListTo('All');
+            await expect(todoPage.todoItems).toHaveCount(3);
+        })
     // Clear completed todos
     // Verify todo count updates correctly
     });

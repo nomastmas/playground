@@ -4,7 +4,7 @@ class TodoPage {
     constructor(page) {
         this.page = page;
         this.newTodoInput = page.getByTestId('header').getByTestId('text-input');
-        this.todoItems = page.getByTestId('todo-item');
+        this.todoItems = page.getByTestId('todo-list').locator('li');
         this.todoItemInput = this.todoItems.getByTestId('text-input');
         this.todoItemLabels = this.todoItems.getByTestId('todo-item-label');
         this.todoItemCheckbox = this.todoItems.getByTestId('todo-item-toggle');
@@ -13,6 +13,10 @@ class TodoPage {
 
     async goto() {
         await this.page.goto('https://todomvc.com/examples/react/dist/');
+    }
+
+    async switchListTo(text) {
+        await this.page.getByTestId('footer-navigation').getByText(text).click();
     }
 
     async addTodoItem(text) {
