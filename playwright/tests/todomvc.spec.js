@@ -1,6 +1,5 @@
 const { test, expect } = require('@playwright/test');
 const TodoPage = require('./pages/TodoPage');
-const { todo } = require('node:test');
 
 test.describe('todo mvc', () => {
     let todoPage;
@@ -20,13 +19,16 @@ test.describe('todo mvc', () => {
             await expect(todoPage.todoItems).toHaveCount(1);
         });
 
-        test('mark a todo as complete', async ({ page }) => {
+        test.only('mark a todo as complete', async ({ page }) => {
             await todoPage.addTodoItem('buy milk');
             await expect(todoPage.todoItems).toHaveCount(1);
-            await todoPage.markTodoComplete('buy milk');
 
+
+            await todoPage.markTodoComplete('buy milk');
             await expect(todoPage.todoItems).toHaveText('buy milk');
             await expect(todoPage.todoItems).toHaveCount(1);
+            await expect(todoPage.getCompletedTodoItem('buy milk')).toHaveText('buy milk');
+            await expect(todoPage.getCompletedTodoItem('buy milk')).toHaveCSS('text-decoration', /line-through/);
         });
 
         test.skip('delete a todo item', async ({ page }) => {

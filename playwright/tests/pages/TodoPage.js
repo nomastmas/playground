@@ -5,7 +5,7 @@ class TodoPage {
         this.page = page;
         this.newTodoInput = page.getByTestId('header').getByTestId('text-input');
         this.todoItems = page.getByTestId('todo-list').locator('li');
-        this.completedTodoItems = page.locator('.completed').locator('li');
+        this.completedTodoItems = page.locator('.completed');
         this.todoItemInput = this.todoItems.getByTestId('text-input');
         this.todoItemLabels = this.todoItems.getByTestId('todo-item-label');
         this.todoItemCheckbox = this.todoItems.getByTestId('todo-item-toggle');
@@ -35,6 +35,14 @@ class TodoPage {
         const index = await this.findItemIndex(text);
         if (index >= 0) await this.editTodoItemByIndex(index, newText);
         return this;
+    }
+
+    getTodoItem(text) {
+        return this.todoItems.getByText(text);
+    }
+
+    getCompletedTodoItem(text) {
+        return this.completedTodoItems.getByText(text);
     }
 
     async findItemIndex(text) {
@@ -83,7 +91,7 @@ class TodoPage {
     */
 
     async todoItemCount() {
-        return this.todoItemLabels.count();
+        return await this.todoItemLabels.count();
     }
 }
 
