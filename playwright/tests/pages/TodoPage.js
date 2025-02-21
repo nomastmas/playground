@@ -5,6 +5,7 @@ class TodoPage {
         this.page = page;
         this.newTodoInput = page.getByTestId('header').getByTestId('text-input');
         this.todoItems = page.getByTestId('todo-list').locator('li');
+        this.completedTodoItems = page.locator('.completed').locator('li');
         this.todoItemInput = this.todoItems.getByTestId('text-input');
         this.todoItemLabels = this.todoItems.getByTestId('todo-item-label');
         this.todoItemCheckbox = this.todoItems.getByTestId('todo-item-toggle');

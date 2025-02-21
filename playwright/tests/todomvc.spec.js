@@ -98,21 +98,27 @@ test.describe('todo mvc', () => {
         })
     });
 
-    test.describe('advanced', () => {
-    // Advanced tests
-    // Verify todos persist after page reload (localStorage)
-    // Filter todos (All/Active/Completed)
-    // Add multiple todos and verify order
-    // Test with long text/special characters
-    // Test keyboard shortcuts (Enter to add, Esc to cancel edit)
-    });
-
     test.describe('edge cases', () => {
-    // Edge cases
-    // Add empty todo (should not be allowed)
-    // Add whitespace-only todo
-    // Add very long todo text
-    // Handle duplicate todo items
+        test('cannot create empty todo item', async () => {
+            await todoPage.addTodoItem('');
+            await expect(todoPage.todoItems).toHaveCount(0);
+        });
+
+        test('cannot create todo item with just spaces', async () => {
+            await todoPage.addTodoItem(' ');
+            await expect(todoPage.todoItems).toHaveCount(0);
+        });
+
+        test('can create duplicate todo items', async () => {
+            await todoPage.addTodoItem('buy eggs');
+            await todoPage.addTodoItem('buy eggs');
+            await expect(todoPage.todoItems).toHaveCount(2);
+
+            await todoPage.switchListTo('Active');
+            await todoPage.markTodoComplete('buy eggs');
+            await todoPage.markTodoComplete('buy eggs');
+            await expect(todoPage.todoItems).toHaveCount(0);
+        });
     });
 
 });
