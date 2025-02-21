@@ -19,7 +19,7 @@ test.describe('todo mvc', () => {
             await expect(todoPage.todoItems).toHaveCount(1);
         });
 
-        test.only('mark a todo as complete', async ({ page }) => {
+        test('mark a todo as complete', async ({ page }) => {
             await todoPage.addTodoItem('buy milk');
             await expect(todoPage.todoItems).toHaveCount(1);
 
@@ -78,6 +78,11 @@ test.describe('todo mvc', () => {
 
             await todoPage.markTodoComplete('buy eggs');
             await todoPage.markTodoComplete('buy butter');
+
+
+            await expect(todoPage.getActiveTodoItem('buy milk')).toHaveText('buy milk');
+            await expect(todoPage.getCompletedTodoItem('buy butter')).toHaveText('buy butter');
+            await expect(todoPage.getCompletedTodoItem('buy butter')).toHaveText('buy butter');
 
             await todoPage.clearCompletedTodoItems();
             await expect(todoPage.todoItems).toHaveCount(1);

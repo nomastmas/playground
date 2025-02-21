@@ -4,13 +4,17 @@ class TodoPage {
     constructor(page) {
         this.page = page;
         this.newTodoInput = page.getByTestId('header').getByTestId('text-input');
+
         this.todoItems = page.getByTestId('todo-list').locator('li');
-        this.completedTodoItems = page.locator('.completed');
+        this.activeTodoItems = page.getByTestId('todo-list').locator('li:not(.completed)');
+        this.completedTodoItems = page.getByTestId('todo-list').locator('.completed');
+
         this.todoItemInput = this.todoItems.getByTestId('text-input');
         this.todoItemLabels = this.todoItems.getByTestId('todo-item-label');
         this.todoItemCheckbox = this.todoItems.getByTestId('todo-item-toggle');
         this.todoDelete = page.getByTestId('todo-item-button');
         this.clearCompletedButton = page.getByText('Clear completed');
+
         this.todoCountSummary = page.getByTestId('footer').locator('.todo-count');
     }
 
@@ -39,6 +43,10 @@ class TodoPage {
 
     getTodoItem(text) {
         return this.todoItems.getByText(text);
+    }
+
+    getActiveTodoItem(text) {
+        return this.activeTodoItems.getByText(text);
     }
 
     getCompletedTodoItem(text) {
