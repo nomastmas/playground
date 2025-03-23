@@ -12,7 +12,7 @@ app.post('/job', async (req, res) => {
   const jobId = short.generate();
   
   // Simulate calling encoder service (stubbed)
-  const encoderJobId = uuidv4(); // You would normally get this from encoder API
+  const encoderJobId = uuidv4();
   
   const jobData = {
     id: jobId,
@@ -22,7 +22,7 @@ app.post('/job', async (req, res) => {
   };
 
   await redis.hset(`job:${jobId}`, jobData);
-  await redis.sadd('jobs:pending', jobId); // Track pending jobs
+  await redis.sadd('jobs:pending', jobId);
 
   res.status(201).json({ message: 'Job created', jobId });
 });

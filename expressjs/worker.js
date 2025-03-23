@@ -8,10 +8,9 @@ async function pollJobs() {
     const job = await redis.hgetall(`job:${jobId}`);
 
     try {
-      // Simulate polling encoder service
       console.log(`Polling encoder for job ${jobId}...`);
       
-      // Here, simulate success/failure after random delay
+      // simulate success/failure after random delay
       const isCompleted = Math.random() < 0.3; // 30% chance complete
       
       if (isCompleted) {
@@ -31,7 +30,6 @@ async function pollJobs() {
   }
 }
 
-// Poll every 10 seconds
 setInterval(pollJobs, 10000);
 
 console.log('Background worker running...');
