@@ -7,15 +7,23 @@ services:
     ports:
       - "6379:6379"
 
-  server:
+  job-service:
     build: .
-    container_name: express-server
+    container_name: job-service
     ports:
       - "3000:3000"
     environment:
       - REDIS_HOST=redis
+      - ENCODER_URL=http://encoder-service
     depends_on:
       - redis
+  
+  encoder-service:
+    build: .
+    container_name: encoder-service
+    ports:
+      - "3001:3001"
+    command: ["node", "encoder.js"]
 
   worker:
     build: .
@@ -23,5 +31,6 @@ services:
     command: ["node", "worker.js"]
     environment:
       - REDIS_HOST=redis
+      - ENCODER_URL=http://encoder-service
     depends_on:
       - redis
