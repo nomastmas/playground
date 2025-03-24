@@ -1,5 +1,5 @@
+const axios = require('axios');
 const express = require('express');
-const { v4: uuidv4 } = require('uuid');
 const short = require('short-uuid');
 const redis = require('./redisClient');
 
@@ -12,11 +12,11 @@ app.post('/job', async (req, res) => {
   const jobId = short.generate();
   
   // Simulate calling encoder service (stubbed)
-  const encoderJobId = uuidv4();
+  const encoderJob = await axios.post(`${process.env.ENCODER_URL}:3001/job`)
   
   const jobData = {
     id: jobId,
-    encoderJobId,
+    encoderJobId: encoderJob.data.id,
     status: 'pending',
     createdAt: new Date().toISOString(),
   };

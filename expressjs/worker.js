@@ -8,10 +8,10 @@ async function pollJobs() {
     const job = await redis.hgetall(`job:${jobId}`);
 
     try {
-      console.log(`Polling encoder for job ${jobId}...`);
+      console.log(`Polling encoder for job ${job.encoderJobId}...`);
       
-      // simulate success/failure after random delay
-      const isCompleted = Math.random() < 0.3; // 30% chance complete
+      const res = await axios.get(`${process.env.ENCODER_URL}:3001/job/${jobId}`);
+      const isCompleted = res.data.status === 'completed'; 
       
       if (isCompleted) {
         await redis.hset(`job:${jobId}`, {
