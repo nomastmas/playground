@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  job-service:
+    build: .
+    container_name: job-service
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_HOST=redis
+      - ENCODER_URL=http://encoder-service
+    depends_on:
+      - redis
+  
+  encoder-service:
+    build: .
+    container_name: encoder-service
+    ports:
+      - "3001:3001"
+    command: ["node", "encoder.js"]
+
+  worker:
+    build: .
+    container_name: job-worker
+    command: ["node", "worker.js"]
+    environment:
+      - REDIS_HOST=redis
+      - ENCODER_URL=http://encoder-service
+    depends_on:
+      - redis

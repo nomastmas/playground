@@ -1,0 +1,24 @@
+{
+  "name": "expressjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down",
+    "docker:restart": "npm run docker:down && npm run docker:up",
+    "docker:logs": "docker-compose logs -f --tail=50",
+    "server": "docker-compose exec job-service sh",
+    "worker": "docker-compose exec worker sh",
+    "redis-cli": "docker exec -it redis redis-cli",
+    "clean": "docker-compose down -v --remove-orphans"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "express": "^4.21.2",
+    "ioredis": "^5.6.0",
+    "short-uuid": "^5.2.0"
+  }
+}
