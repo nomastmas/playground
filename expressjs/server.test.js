@@ -77,9 +77,10 @@ describe('Server test', () => {
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockJobs);
       expect(redis.keys).toHaveBeenCalledTimes(1);
-      expect(redis.hgetall).toHaveBeenCalledTimes(mockJobs.length);
       expect(redis.keys).toHaveBeenCalledWith('job:*');
-
+      expect(redis.hgetall).toHaveBeenCalledTimes(mockJobs.length);
+      expect(redis.hgetall).toHaveBeenNthCalledWith(1, 'job:1');
+      expect(redis.hgetall).toHaveBeenNthCalledWith(2, 'job:2');
     })
   })
 })
