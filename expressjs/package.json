@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
     "docker:up": "docker-compose up --build",
     "docker:down": "docker-compose down",
     "docker:restart": "npm run docker:down && npm run docker:up",
@@ -20,5 +21,8 @@
     "express": "^4.21.2",
     "ioredis": "^5.6.0",
     "short-uuid": "^5.2.0"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0"
   }
 }
