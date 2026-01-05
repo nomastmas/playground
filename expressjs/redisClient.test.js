@@ -2,7 +2,6 @@
 
 jest.mock('ioredis');
 let redis;
-let redisClient;
 
 describe('Redis Client', () => {
   describe('Redis with env set', () => {
